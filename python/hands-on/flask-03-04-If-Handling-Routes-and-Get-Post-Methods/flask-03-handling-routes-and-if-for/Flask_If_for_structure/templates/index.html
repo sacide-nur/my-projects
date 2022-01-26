@@ -7,16 +7,15 @@
 </head>
 <body>
 
-{% comment %} 
-{% if messsage %}
+
+{% if message %}
     <h1> {{ message }} </h1>
 {% else %}
     <h1> "There is no message in here...</h1> 
 {% endif %} 
-{% endcomment %}
 
 
-{% comment %} 
+
 <ul>
 {% for x in object %}
      
@@ -24,7 +23,7 @@
     
 {% endfor %} 
 </ul>
-{% endcomment %}
+
 
 </body>
 </html>
