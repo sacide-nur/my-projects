@@ -1,36 +1,47 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Description: |
-  The Roman Numerals Converter Application aims to convert the given number to the Roman numerals. The application is to be coded in Python and deployed as a 
-web application with Flask on AWS Elastic Compute Cloud (EC2) Instance using AWS Cloudformation and CLI Services. 
+  Roman Numerals Converter Application (Python Flask) deployed on AWS EC2 with Cloudformation.
 
 Parameters:
-  myKP:
-    Description: Select Your Key
+  myKeyPair:
+    Description: Select your key
     Type: AWS::EC2::KeyPair::KeyName
-  
+
   myAMI:
     Description: The id of the AMI
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
-
-
-
+  
 Resources:
-  MyInstance:
+  mySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enables ssh and http # Required
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+  
+  myServer:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !Ref myAMI 
+      ImageId: !Ref myAMI
+      KeyName: !Ref myKeyPair
       InstanceType: t2.micro
-      KeyName: !Ref myKP # Please use your own key name without 
       SecurityGroupIds:
-        - !Ref MySG
+        - !Ref mySecurityGroup 
       Tags:
         - Key: Name
           Value: !Sub Web Server of ${AWS::StackName} Stack
-      UserData:
+      UserData: 
         Fn::Base64: |
-            #! bin/bas
+            #! /bin/bash
             yum update -y
             pip3 install flask
             cd /home/ec2-user
@@ -43,27 +54,116 @@ Resources:
             mv result.html templates
             python3 app.py
       
-  MySG:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Enable SSH and HTTP # Required
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
 Outputs:
-  WebsiteURL:
+  WebsiteUrl:
     Description: Roman Numerals Converter Application URL
     Value: !Join 
        - ''
        - - 'http://'
-         - !GetAtt MyInstance.PublicDnsName
- 
-     
+         - !GetAtt myServer.PublicDnsName
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
+            
+            
+              
+              
+              
+          
+          
+          
       
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+       
+       
+       
